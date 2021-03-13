@@ -41,6 +41,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.androiddevchallenge.R
 import com.example.androiddevchallenge.ui.theme.WeTradeTheme
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 
 @Composable
 fun Welcome(onLoginClick: () -> Unit) {
@@ -60,7 +61,7 @@ fun Welcome(onLoginClick: () -> Unit) {
                     start = 16.dp,
                     end = 16.dp
                 )
-                .height(48.dp)
+                .navigationBarsPadding(bottom = true)
         ) {
             Image(
                 painterResource(id = R.drawable.ic_logo),

@@ -62,6 +62,7 @@ import com.example.androiddevchallenge.ui.theme.WeTradeTheme
 import com.example.androiddevchallenge.ui.theme.green
 import com.example.androiddevchallenge.ui.theme.red
 import com.example.androiddevchallenge.ui.theme.white
+import dev.chrisbanes.accompanist.insets.navigationBarsPadding
 
 @ExperimentalMaterialApi
 @Composable
@@ -70,7 +71,8 @@ fun Home() {
         sheetContent = { SheetContent() },
         content = { HomeContent() },
         sheetShape = RoundedCornerShape(0.dp),
-        sheetPeekHeight = 64.dp
+        sheetPeekHeight = 64.dp,
+        modifier = Modifier.navigationBarsPadding(bottom = true)
     )
 }
 
