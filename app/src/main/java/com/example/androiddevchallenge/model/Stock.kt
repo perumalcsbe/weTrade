@@ -13,14 +13,14 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.androiddevchallenge.ui.theme
+package com.example.androiddevchallenge.model
 
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Shapes
-import androidx.compose.ui.unit.dp
+import androidx.annotation.DrawableRes
 
-val shapes = Shapes(
-    small = RoundedCornerShape(4.dp),
-    medium = RoundedCornerShape(4.dp),
-    large = RoundedCornerShape(50)
+data class Stock(
+    val symbol: String,
+    val name: String,
+    val price: String,
+    val delta: Double,
+    @DrawableRes val visualization: Int
 )

@@ -16,46 +16,57 @@
 package com.example.androiddevchallenge
 
 import android.os.Bundle
+import androidx.activity.OnBackPressedDispatcher
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.animation.Crossfade
+import androidx.compose.material.ExperimentalMaterialApi
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
-import com.example.androiddevchallenge.ui.theme.MyTheme
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
+import androidx.core.view.WindowCompat
+import com.example.androiddevchallenge.ui.screen.Home
+import com.example.androiddevchallenge.ui.screen.Login
+import com.example.androiddevchallenge.ui.screen.Welcome
+import com.example.androiddevchallenge.ui.theme.WeTradeTheme
+import com.example.androiddevchallenge.ui.util.LocalBackDispatcher
+import com.example.androiddevchallenge.ui.util.Navigator
+import dev.chrisbanes.accompanist.insets.ProvideWindowInsets
 
 class MainActivity : AppCompatActivity() {
+    @ExperimentalMaterialApi
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContent {
-            MyTheme {
-                MyApp()
+            WeTradeTheme {
+                ProvideWindowInsets {
+                    WeTradeApp(OnBackPressedDispatcher())
+                }
             }
         }
     }
 }
 
 // Start building your app here!
+@ExperimentalMaterialApi
 @Composable
-fun MyApp() {
-    Surface(color = MaterialTheme.colors.background) {
-        Text(text = "Ready... Set... GO!")
+fun WeTradeApp(backPressedDispatcher: OnBackPressedDispatcher) {
+    val navigator: Navigator<Destination> = rememberSaveable(
+        saver = Navigator.saver(backPressedDispatcher)
+    ) {
+        Navigator(Destination.Welcome, backPressedDispatcher)
     }
-}
+    val actions = remember(navigator) { Actions(navigator) }
 
-@Preview("Light Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun LightPreview() {
-    MyTheme {
-        MyApp()
-    }
-}
-
-@Preview("Dark Theme", widthDp = 360, heightDp = 640)
-@Composable
-fun DarkPreview() {
-    MyTheme(darkTheme = true) {
-        MyApp()
+    CompositionLocalProvider(LocalBackDispatcher provides backPressedDispatcher) {
+        Crossfade(navigator.current) { destination ->
+            when (destination) {
+                Destination.Welcome -> Welcome(actions.onLoginClick)
+                is Destination.Login -> Login(actions.onLoginSubmit)
+                is Destination.Home -> Home()
+            }
+        }
     }
 }
